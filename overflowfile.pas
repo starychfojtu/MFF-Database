@@ -1,0 +1,71 @@
+unit OverflowFile;
+
+interface
+
+uses
+    ByteFileUtils, DbRecord, TableMetadata;
+
+{ Returns true when overflow area is full }
+function IsOverflowFileFull(): boolean;
+
+{ Inserts given record in the overflow area }
+procedure InsertIntoOverflowFile(dbRecord: TDbRecord);
+
+{ Returns the overflow area }
+function GetOverflowBlock(): PBlock;
+
+{ Returns count of all records in overflow area }
+function GetOverflowRecordCount(): LongWord;
+
+const
+  OVERFLOW_FILE = 'table.overflow';
+
+implementation
+
+function IsOverflowFileFull(): boolean;
+var f: file of byte;
+begin
+     Assign(f, OVERFLOW_FILE);
+     Reset(f);
+
+     IsOverflowFileFull := FileSize(f) >= BLOCK_SIZE;
+
+     Close(f);
+end;
+
+procedure InsertIntoOverflowFile(dbRecord: TDbRecord);
+var f: file of byte;
+begin
+     Assign(f, OVERFLOW_FILE);
+     Reset(f);
+
+     Seek(f, FileSize(f));
+     WriteRecord(f, dbRecord);
+
+     Close(f);
+end;
+
+function GetOverflowBlock(): PBlock;
+var f: file of byte;
+begin
+     Assign(f, OVERFLOW_FILE);
+     Reset(f);
+
+     GetOverflowBlock := GetBlock(f, 0);
+
+     Close(f);
+end;
+
+function GetOverflowRecordCount(): LongWord;
+var f: file of byte;
+begin
+     Assign(f, OVERFLOW_FILE);
+     Reset(f);
+
+     GetOverflowRecordCount := FileSize(f) div GetRecordSize(GetCurrentTableMetadata());
+
+     Close(f);
+end;
+
+end.
+

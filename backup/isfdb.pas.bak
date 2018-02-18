@@ -1,0 +1,8 @@
+program ISFDB;
+
+uses IsfDbUI;
+
+begin
+  LoadUI;
+end.
+

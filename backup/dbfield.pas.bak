@@ -1,0 +1,83 @@
+unit TableField;
+
+type
+  EFieldType = (tint, tstring, tbool);
+  PField = ^TField;
+  TFieldName = string[10];
+  TField = record
+    name: TFieldName;
+    length: byte;
+    fieldType: EFieldType;
+    id: boolean;
+    autoincrement: boolean;
+    next: PField;
+  end;
+
+const
+   SUPPORTED_TYPES_COUNT = 3;
+   SUPPORTED_TYPES_NAMES: array [1 .. SUPPORTED_TYPES_COUNT] of TFieldName = ('int', 'string', 'bool');
+
+
+interface
+
+function createField(name: TFieldName; id, autoincrement: boolean): PField;
+//function isSupportedTypeName(name: TFieldName): boolean;
+//function getFieldTypeFromName(name: TFieldName): EFieldType;
+//function getFieldLength(name: TFieldName): byte;
+
+implementation
+
+{Creates field description based on user declaration and return its pointer}
+function createField(name: TFieldName; id, autoincrement: boolean): PField;
+var newField: PTField;
+begin
+    if not isSupportedTypeName(name) then
+    begin
+      createField := nil;
+      exit;
+    end;
+
+    new(newField);
+    newField^.name := name;
+    newField^.id := id;
+    newField^.autoincrement := autoincrement;
+    newField^.fieldType := getFieldTypeFromName(name);
+    newField^.length := getFieldLength(name);
+
+    createField := newField;
+end;
+
+{Check whether given name is supported type name}
+function isSupportedTypeName(name: TFieldName): boolean;
+var i: byte;
+begin
+     isSupportedTypeName := false;
+
+     for i:=1 to SUPPORTED_TYPES_COUNT do
+       if SUPPORTED_TYPES_NAMES[i] = name then
+         isSupportedTypeName := true;
+end;
+
+{Returns type in enum representation from string name}
+function getFieldTypeFromName(name: TFieldName): EFieldType;
+var i: byte;
+begin
+     case name of
+       'int': getFieldTypeFromName := EFieldType.tint;
+       'string': getFieldTypeFromName := EFieldType.tstring;
+       'bool': getFieldTypeFromName := EFieldType.tbool;
+     end;
+end;
+
+{Returns length in bytes of given type}
+function getFieldLength(name: TFieldName): byte;
+begin
+     case name of
+       'int': getFieldLength := 4;
+       'string' : getFieldLength := 32;
+       'bool' : getFieldLength := 1;
+     end;
+end;
+
+end.
+
