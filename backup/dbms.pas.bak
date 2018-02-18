@@ -64,7 +64,7 @@ procedure SelectAll();
 var f: file of byte;
     metadata: PTableMetadata;
     dbRecord: TDbRecord;
-    blockNumber, recordCount, recordSize, blockCount, address, maxAddress, blockFactor: LongWord;
+    blockNumber, recordCount, recordSize, blockCount, address, maxAddress, blockFactor, overflowRecordCount: LongWord;
     block: PBlock;
 begin
   Assign(f, TABLE_DATA_FILE);
@@ -77,12 +77,20 @@ begin
   blockFactor := BLOCK_SIZE div recordSize;
   address := 0;
 
-  if (blockCount = 0) then begin
-     WriteLn('No records found');
-     Close(f);
-     exit;
+  { Print overflow }
+  overflowRecordCount := GetOverflowRecordCount();
+  if (overflowRecordCount <> 0) then begin
+    block := GetOverflowBlock();
+    maxAddress := overflowRecordCount * recordSize mod BLOCK_SIZE;
+    while address < maxAddress do begin
+        if (block^[address] = 0) then PrintRecord(CreateFromDbData(block, address, recordSize), metadata);
+        address := address + recordSize;
+    end;
   end;
 
+  if (blockCount = 0) then exit;
+
+  { Print Primary file }
   for blockNumber:=0 to blockCount-1 do begin
       block := GetBlock(f, blockNumber);
       maxAddress := BLOCK_SIZE;
@@ -118,17 +126,45 @@ begin
 end;
 
 function Delete(id: LongWord): boolean;
-var blockNumber, i: Longint;
-    block: PBlock;
-    dbRecord: PDbRecord;
+var block: PBlock;
+    blockNumber: LongWord;
+    address: SmallInt;
     f: file of byte;
 begin
-     {oveflowDelete := DeleteDbRecordInOverflowWithId(id);
-     Delete := oveflowDelete;
+     block := GetOverflowBlock();
+     address := GetDbRecordAddressWithId(block, id);
 
-     if (oveflowDelete) then exit;
+     if (address <> -1) then begin
+        block^[address] := 1;
+        SaveOverflowBlock(block);
+        Delete := true;
+        exit;
+     end;
 
-     Delete := DeleteDbRecordInOverflowWithId(id);}
+     Assign(f, TABLE_DATA_FILE);
+     Reset(f);
+
+     blockNumber := GetBlockNumberByRecordId(id);
+     block := GetBlock(f, blockNumber);
+     address := GetDbRecordAddressWithId(block, id);
+
+     if (address <> -1) then begin
+        block^[address] := 1;
+        Seek(f, BLOCK_SIZE * blockNumber);
+
+        if (blockNumber = GetBlockCount(f)-1) and (FileSize(f) mod BLOCK_SIZE <> 0) then begin
+           BlockWrite(f, block^, FileSize(f) mod BLOCK_SIZE);
+        end else begin
+           BlockWrite(f, block^, BLOCK_SIZE);
+        end;
+
+        Delete := true;
+        Close(f);
+        exit;
+     end;
+
+     Delete := false;
+     Close(f);
 end;
 
 end.

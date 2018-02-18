@@ -11,6 +11,9 @@ function GetBlockNumberByRecordId(id: LongWord): Longint;
 { Returns pointer to record with given id in given block or nil if not found or the record is marked deleted }
 function GetDbRecordWithId(block: PBlock; id: LongWord): PDbRecord;
 
+{ Returns pointer to record with given id in given block or -1 id not found or the record is marked deleted }
+function GetDbRecordAddressWithId(block: PBlock; id: LongWord): SmallInt;
+
 { Returns count of records in given file }
 function GetRecordsCount(var f: TFile): LongWord;
 
@@ -133,6 +136,34 @@ begin
      end;
 
      getDbRecordWithId := nil;
+end;
+
+function GetDbRecordAddressWithId(block: PBlock; id: LongWord): SmallInt;
+var address, blockFactor, recordSize, recordId: LongWord;
+    isDeleted: boolean;
+begin
+     recordSize := GetRecordSize(GetCurrentTableMetadata());
+     blockFactor := BLOCK_SIZE div recordSize;
+     address := 0;
+
+     while address < BLOCK_SIZE do begin
+         isDeleted := boolean(block^[address]);
+         recordId := PLongWord(PByte(block) + 1 + address)^;
+
+         if ((recordId = id) and (isDeleted = false)) then begin
+            GetDbRecordAddressWithId := Smallint(address);
+            exit;
+         end;
+
+         if (recordId > id) then begin
+            GetDbRecordAddressWithId := -1;
+            exit;
+         end;
+
+         address := address + recordSize;
+     end;
+
+     GetDbRecordAddressWithId := -1;
 end;
 
 function GetRecordsCount(var f: TFile): LongWord;

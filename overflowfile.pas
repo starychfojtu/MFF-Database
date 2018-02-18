@@ -17,6 +17,9 @@ function GetOverflowBlock(): PBlock;
 { Returns count of all records in overflow area }
 function GetOverflowRecordCount(): LongWord;
 
+{ Saves given block as overflow block }
+procedure SaveOverflowBlock(block: PBlock);
+
 const
   OVERFLOW_FILE = 'table.overflow';
 
@@ -63,6 +66,17 @@ begin
      Reset(f);
 
      GetOverflowRecordCount := FileSize(f) div GetRecordSize(GetCurrentTableMetadata());
+
+     Close(f);
+end;
+
+procedure SaveOverflowBlock(block: PBlock);
+var f: file of byte;
+begin
+     Assign(f, OVERFLOW_FILE);
+     Rewrite(f);
+
+     BlockWrite(f, block^, FileSize(f));
 
      Close(f);
 end;

@@ -20,6 +20,7 @@ const
      COMMAND_INSERT_ROW = 'insert row';
      COMMAND_BUILD_INDEX = 'build index';
      COMMAND_REORGANIZE = 'reorganize';
+     COMMAND_DELETE = 'delete';
 
 procedure Help();
 begin
@@ -129,6 +130,7 @@ var tableMetadata: PTableMetadata;
     currentField: PField;
     dbRecord: TDbRecord;
     addrIndex,i: LongWord;
+    result: boolean;
 begin
   WriteLn('Creating new record:');
   tableMetadata := GetCurrentTableMetadata();
@@ -149,8 +151,20 @@ begin
         currentField := currentField^.next;
   end;
 
-  insert(dbRecord);
-  Writeln('Record with id ',dbRecord.id, 'successfuly inserted');
+  result := insert(dbRecord);
+
+  if result then
+     Writeln('Record with id ',dbRecord.id, 'successfuly inserted.')
+  else
+     Writeln('Record with id ',dbRecord.id, ' already exists.')
+end;
+
+procedure DeletebyId();
+var id: LongWord;
+begin
+     Write('ID: ');
+     ReadLn(id);
+     if Delete(id) then WriteLn('Record deleted.') else Write('Record not found');
 end;
 
 procedure LoadUI();
@@ -161,6 +175,9 @@ begin
   writeln('    By Josef Starychfojtu, MFF UK project');
   writeln('    Type help for possible commands');
   writeln();
+  writeln('/*******************************************/');
+
+  Help();
   writeln('/*******************************************/');
 
   readln(command);
@@ -179,7 +196,8 @@ begin
              COMMAND_REORGANIZE: begin
                    Reorganize();
                    WriteLn('Database reorganized.');
-             end
+             end;
+             COMMAND_DELETE: DeletebyId();
              else writeln('Invalid command ', command, ', see help for possible commands.');
         end;
         readln(command);

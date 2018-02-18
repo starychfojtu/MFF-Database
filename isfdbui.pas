@@ -20,17 +20,19 @@ const
      COMMAND_INSERT_ROW = 'insert row';
      COMMAND_BUILD_INDEX = 'build index';
      COMMAND_REORGANIZE = 'reorganize';
+     COMMAND_DELETE = 'delete';
 
 procedure Help();
 begin
   writeln('exit - exits the dbms');
-  writeln('search [id] - search for a row with given id');
+  writeln('search - search for a row with given id');
   writeln('insert row - will show you current columns and ask you for values');
   writeln('create table - will ask you for values to create a new table, destroys the previous');
   writeln('schema - shows current table metadata');
   writeln('select all - print all rows');
   writeln('build index - builds new index file');
   writeln('reorganize - forces the database reorganization');
+  writeln('delete - deletes record with given id');
 end;
 
 procedure CreateTable();
@@ -158,6 +160,14 @@ begin
      Writeln('Record with id ',dbRecord.id, ' already exists.')
 end;
 
+procedure DeletebyId();
+var id: LongWord;
+begin
+     Write('ID: ');
+     ReadLn(id);
+     if Delete(id) then WriteLn('Record deleted.') else Write('Record not found');
+end;
+
 procedure LoadUI();
 var command: string[20];
 begin
@@ -166,6 +176,9 @@ begin
   writeln('    By Josef Starychfojtu, MFF UK project');
   writeln('    Type help for possible commands');
   writeln();
+  writeln('/*******************************************/');
+
+  Help();
   writeln('/*******************************************/');
 
   readln(command);
@@ -184,7 +197,8 @@ begin
              COMMAND_REORGANIZE: begin
                    Reorganize();
                    WriteLn('Database reorganized.');
-             end
+             end;
+             COMMAND_DELETE: DeletebyId();
              else writeln('Invalid command ', command, ', see help for possible commands.');
         end;
         readln(command);
