@@ -24,14 +24,17 @@ const
 
 procedure Help();
 begin
+  writeln('help - shows help');
   writeln('exit - exits the dbms');
-  writeln('search [id] - search for a row with given id');
-  writeln('insert row - will show you current columns and ask you for values');
   writeln('create table - will ask you for values to create a new table, destroys the previous');
   writeln('schema - shows current table metadata');
+  writeln('insert row - will show you current columns and ask you for values');
+  writeln('search - search for a row with given id');
   writeln('select all - print all rows');
-  writeln('build index - builds new index file');
-  writeln('reorganize - forces the database reorganization');
+  writeln('delete - deletes record with given id');
+  writeln('count - returns records count');
+  writeln('build index - builds new index file (not recommended to use)');
+  writeln('reorganize - forces the database reorganization (not recommended to use)');
 end;
 
 procedure CreateTable();
@@ -50,42 +53,34 @@ begin
   writeln('Now add field by this pattern per line:');
   writeln('name(string)');
   writeln('type(enum)');
-  writeln('isId(true/false)');
-  writeln('autoincrement(true/false)');
   write('Supported types are: ');
   for i:=1 to SUPPORTED_TYPES_COUNT do write(SUPPORTED_TYPES[i], ' ');
   writeln();
   writeln('End by typing: create');
+  writeln('Note that ID (int) is already added automatically.');
 
   while true do begin
         {Load field name}
-        readln(fieldName);
+        Write('Name: ');
+        ReadLn(fieldName);
 
         {Break loop}
         if (fieldName = 'create') then break;
 
         {Load field type}
-        readln(fieldType);
+        Write('Type: ');
+        ReadLn(fieldType);
         if (not isSupportedTypeName(fieldType)) then begin
-           writeln('Unsupported type: ', fieldType);
+           Writeln('Unsupported type: ', fieldType);
            continue;
         end;
 
-        {Load Id}
-        readln(input);
-        if (input = 'true') then id := true else id := false;
-        writeln(id);
-
-        {Load Autoincrement}
-        readln(input);
-        if (input = 'true') then autoincrement := true else autoincrement := false;
-        writeln(autoincrement);
-
         {Add field}
-        AddField(table, fieldName, fieldType, id, autoincrement);
+        AddField(table, fieldName, fieldType);
   end;
 
   SaveTable(table);
+  ResetDb();
   writeln('Table ', table^.name, ' successfully created. (Metedata size: ', sizeof(table),')');
 end;
 
@@ -103,8 +98,6 @@ begin
            writeln('Name: ', field^.name);
            writeln('Type: ', SUPPORTED_TYPES[byte(field^.fieldType) + 1]);
            writeln('Length: ', field^.length);
-           writeln('ID: ', field^.id);
-           writeln('AutoIncrement: ', field^.autoincrement);
            field := field^.next;
      end;
 end;

@@ -10,6 +10,8 @@ type
   PString = ^String;
 
   EFieldType = (tint, tstring, tbool);
+  PRecordString = ^TRecordString;
+  TRecordString = String[31];
   TFieldName = string[10];
   TFieldType = string[10];
 
@@ -18,24 +20,18 @@ type
     name: TFieldName;
     length: byte;
     fieldType: EFieldType;
-    id: boolean; // TODO : Delete
-    autoincrement: boolean; // TODO : Delete
     next: PField;
   end;
-
-  // TODO: Delete
-  PRecordData = ^TRecordData;
-  TRecordData = array[0..4096] of byte;
 
 const
    SUPPORTED_TYPES_COUNT = 3;
    SUPPORTED_TYPES: array [1 .. SUPPORTED_TYPES_COUNT] of TFieldName = ('int', 'string', 'bool');
 
 
-function createField(name: TFieldName; fieldType: TFieldType; id, autoincrement: boolean): PField;
-function isSupportedTypeName(name: TFieldName): boolean;
-function getFieldTypeFromName(name: TFieldName): EFieldType;
-function getFieldLength(name: TFieldName): byte;
+function CreateField(name: TFieldName; fieldType: TFieldType): PField;
+function IsSupportedTypeName(name: TFieldName): boolean;
+function GetFieldTypeFromName(name: TFieldName): EFieldType;
+function GetFieldLength(name: TFieldName): byte;
 procedure LoadBool(var dbRecord: TDbRecord; fieldSize: byte);
 procedure LoadInt(var dbRecord: TDbRecord; fieldSize: byte);
 procedure LoadString(var dbRecord: TDbRecord; fieldSize: byte);
@@ -44,7 +40,7 @@ function GetFieldValueAsString(field: PField; dbRecord: PDbRecord; address: Long
 
 implementation
 
-function createField(name: TFieldName; fieldType: TFieldType; id, autoincrement: boolean): PField;
+function createField(name: TFieldName; fieldType: TFieldType): PField;
 var newField: PField;
 begin
     if not isSupportedTypeName(fieldType) then
@@ -55,8 +51,6 @@ begin
 
     new(newField);
     newField^.name := name;
-    newField^.id := id;
-    newField^.autoincrement := autoincrement;
     newField^.fieldType := getFieldTypeFromName(fieldType);
     newField^.length := getFieldLength(fieldType);
     newField^.next := nil;
@@ -64,7 +58,7 @@ begin
     createField := newField;
 end;
 
-function isSupportedTypeName(name: TFieldName): boolean;
+function IsSupportedTypeName(name: TFieldName): boolean;
 var i: byte;
 begin
      isSupportedTypeName := false;
@@ -74,7 +68,7 @@ begin
          isSupportedTypeName := true;
 end;
 
-function getFieldTypeFromName(name: TFieldName): EFieldType;
+function GetFieldTypeFromName(name: TFieldName): EFieldType;
 var i: byte;
 begin
      case name of
@@ -84,7 +78,7 @@ begin
      end;
 end;
 
-function getFieldLength(name: TFieldName): byte;
+function GetFieldLength(name: TFieldName): byte;
 begin
      case name of
        'int': getFieldLength := 4;
@@ -120,44 +114,33 @@ begin
     dataLength := Length(dbRecord.data);
     SetLength(dbRecord.data, dataLength + fieldSize);
 
-    PLongWord(@dbRecord.data[dataLength])^ := val;
+    PLongWord(@(dbRecord.data[dataLength]))^ := val;
 end;
 
 procedure LoadString(var dbRecord: TDbRecord; fieldSize: byte);
 var val: String;
-    dataLength: LongWord;
+    dataLength, i: LongWord;
 begin
     ReadLn(val);
 
     dataLength := Length(dbRecord.data);
     SetLength(dbRecord.data, dataLength + fieldSize);
 
-    PString(@dbRecord.data[dataLength])^ := val;
+    for i:=0 to fieldSize-1 do dbRecord.data[i+dataLength] := Byte(val[i]);
 end;
 
 procedure WriteField(var f: TFile; item: PField);
 begin
-     writeString(f, item^.name, sizeof(TFieldName));
-     write(f, byte(item^.fieldType));
-     write(f, item^.length);
-     write(f, byte(item^.id));
-     write(f, byte(item^.autoincrement));
-
-     writeln(
-             'DEBUG | Writing ',
-             item^.name, ' ',
-             byte(item^.fieldType), ' ',
-             item^.length, ' ',
-             byte(item^.id), ' ',
-             byte(item^.autoincrement)
-     );
+     BlockWrite(f, item^.name, SizeOf(TFieldName));
+     Write(f, byte(item^.fieldType));
+     Write(f, item^.length);
 end;
 
 function GetFieldValueAsString(field: PField; dbRecord: PDbRecord; address: LongWord): string;
 begin
     case field^.fieldType of
       EFieldType.tint: GetFieldValueAsString := IntToStr(PLongWord(@(dbRecord^.data[address]))^);
-      EFieldType.tstring: GetFieldValueAsString := PString(@(dbRecord^.data[address]))^;
+      EFieldType.tstring: GetFieldValueAsString := PRecordString(@(dbRecord^.data[address]))^;
       EFieldType.tbool: begin
             if dbRecord^.data[address] = 1 then
                GetFieldValueAsString := 'true'

@@ -2,9 +2,10 @@ program ISFDB;
 
 uses IsfDbUI;
 
-{ Only one table per database }
-{ Does not support update }
-{ Does not support another type of ID then LongWord }
+{ TODO: }
+{ Reorganization with empty overflow file }
+{ Test it all - try to test with small BLOCK_SIZE}
+{ Update ?? }
 
 begin
   LoadUI;

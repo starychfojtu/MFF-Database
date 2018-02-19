@@ -22,7 +22,30 @@ procedure PrintRecord(dbRecord: PDbRecord; metadata: PTableMetadata);
 { Marks record with given id as deleted, returns false when no record found }
 function Delete(id: LongWord): boolean;
 
+{ Resets the whole database }
+procedure ResetDb();
+
 implementation
+
+procedure PrintRecord(dbRecord: PDbRecord; metadata: PTableMetadata);
+var address: LongWord;
+    field : PField;
+begin
+  if (dbRecord = nil) then begin
+     WriteLn('Record with id not found.');
+     exit;
+  end;
+
+  WriteLn('Found record with id ', dbRecord^.id);
+
+  address := 0;
+  field := metadata^.fields;
+  while field <> nil do begin
+        Writeln(field^.name, ': ', GetFieldValueAsString(field, dbRecord, address));
+        address := address + field^.length;
+        field := field^.next;
+  end;
+end;
 
 function Insert(dbRecord: TDbRecord): boolean;
 begin
@@ -88,9 +111,13 @@ begin
     end;
   end;
 
-  if (blockCount = 0) then exit;
+  if (blockCount = 0) then begin
+     Close(f);
+     exit;
+  end;
 
   { Print Primary file }
+  address := 0;
   for blockNumber:=0 to blockCount-1 do begin
       block := GetBlock(f, blockNumber);
       maxAddress := BLOCK_SIZE;
@@ -103,26 +130,6 @@ begin
   end;
 
   Close(f);
-end;
-
-procedure PrintRecord(dbRecord: PDbRecord; metadata: PTableMetadata);
-var address: LongWord;
-    field : PField;
-begin
-  if (dbRecord = nil) then begin
-     WriteLn('Record with id not found.');
-     exit;
-  end;
-
-  WriteLn('Found record with id ', dbRecord^.id);
-
-  address := 0;
-  field := metadata^.fields;
-  while field <> nil do begin
-        Writeln(field^.name, ': ', GetFieldValueAsString(field, dbRecord, address));
-        address := address + field^.length;
-        field := field^.next;
-  end;
 end;
 
 function Delete(id: LongWord): boolean;
@@ -165,6 +172,22 @@ begin
 
      Delete := false;
      Close(f);
+end;
+
+procedure ResetDb();
+var fileToReset, index, overflow: file of byte;
+begin
+  Assign(fileToReset, TABLE_DATA_FILE);
+  Rewrite(fileToReset);
+  Close(fileToReset);
+
+  Assign(fileToReset, OVERFLOW_FILE);
+  Rewrite(fileToReset);
+  Close(fileToReset);
+
+  Assign(fileToReset, INDEX_FILE);
+  Rewrite(fileToReset);
+  Close(fileToReset);
 end;
 
 end.

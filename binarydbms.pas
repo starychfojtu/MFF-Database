@@ -83,7 +83,10 @@ begin
      count := FileSize(f) div 2;
      SetLength(indexes, count);
 
-     if (count = 0) then exit;
+     if (count = 0) then begin
+        Close(f);
+        exit;
+     end;
 
      for i:=0 to count-1 do begin
          Read(f, indexes[i].id);
@@ -358,7 +361,7 @@ begin
             Inc(overflowAddr);
             deletedItemOnTop := true;
 
-            Writeln('DEBUG | ', 'Detected deletion on OVERFLOW item with id: ', overflowSortItems^[overflowAddr].id);
+            Writeln('DEBUG | ', 'Detected deletion on OVERFLOW item with id: ', overflowSortItems^[overflowAddr-1].id);
          end;
 
          { Detect deletions }
@@ -366,7 +369,7 @@ begin
             blockAddr := blockAddr + recordSize;
             deletedItemOnTop := true;
 
-            Writeln('DEBUG | ', 'Detected deletion on PRIMARY item with id: ', PLongWord(block^[blockAddr + 1])^);
+            Writeln('DEBUG | ', 'Detected deletion on PRIMARY item with id: ', PLongWord(@(block^[blockAddr - recordSize + 1]))^);
          end;
 
          { Compare if not deleted }
