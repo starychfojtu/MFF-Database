@@ -31,9 +31,6 @@ implementation
 procedure WriteRecord(var f: TFile; dbRecord: TDbRecord);
 var i: LongWord;
 begin
-     writeln('DEBUG | Inserting record');
-     for i:=0 to Length(dbRecord.data)-1 do Write(' ',dbRecord.data[i]);
-
      BlockWrite(f, byte(dbRecord.IsDeleted), 1);
      BlockWrite(f, dbRecord.id, SizeOf(dbRecord.id));
      for i:=0 to Length(dbRecord.data)-1 do Write(f, dbRecord.data[i]);
@@ -73,10 +70,6 @@ procedure WriteString(var f: TFile; item: string; totalLength: byte);
 var i: longint;
 begin
      BlockWrite(f, item, totalLength);
-     {writeln('DEBUG | Writing ', item, ' of length ', length(item));
-     write(f, byte(length(item)));
-     for i:=1 to totalLength - 1 do
-         write(f, byte(item[i]));}
 end;
 
 end.

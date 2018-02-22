@@ -73,10 +73,6 @@ procedure WriteString(var f: TFile; item: string; totalLength: byte);
 var i: longint;
 begin
      BlockWrite(f, item, totalLength);
-     {writeln('DEBUG | Writing ', item, ' of length ', length(item));
-     write(f, byte(length(item)));
-     for i:=1 to totalLength - 1 do
-         write(f, byte(item[i]));}
 end;
 
 end.

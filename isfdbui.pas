@@ -2,7 +2,7 @@ unit IsfDbUI;
 
 interface
 
-uses TableMetadata, TableField, DBMS, DbRecord, BinaryDBMS;
+uses TableMetadata, TableField, DBMS, DbRecord, BinaryDBMS, OverflowFile;
 
 { Loads the user interface }
 procedure LoadUI();
@@ -21,6 +21,7 @@ const
      COMMAND_BUILD_INDEX = 'build index';
      COMMAND_REORGANIZE = 'reorganize';
      COMMAND_DELETE = 'delete';
+     COMMAND_COUNT = 'count';
 
 procedure Help();
 begin
@@ -191,9 +192,12 @@ begin
                    WriteLn('Database reorganized.');
              end;
              COMMAND_DELETE: DeletebyId();
+             COMMAND_COUNT: WriteLn('Total count: ', GetOverflowRecordCount() + GetRecordCount());
              else writeln('Invalid command ', command, ', see help for possible commands.');
         end;
-        readln(command);
+        WriteLn();
+        ReadLn(command);
+        WriteLn();
   end;
 
   writeln('Bye.');

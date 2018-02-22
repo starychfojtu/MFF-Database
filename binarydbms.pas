@@ -75,8 +75,6 @@ procedure LoadIndexes();
 var f: file of LongWord;
     count, i: LongWord;
 begin
-     if (Length(indexes) > 0) then exit;
-
      Assign(f, INDEX_FILE);
      Reset(f);
 
@@ -170,12 +168,25 @@ begin
 end;
 
 function GetRecordsCount(var f: TFile): LongWord;
-var lastBlockSize, recordSize, blockFactor: LongWord;
+var lastBlockSize, recordSize, blockFactor, blockCount: LongWord;
 begin
+     blockCount := GetBlockCount(f);
+
+     if blockCount = 0 then begin
+        GetRecordsCount := 0;
+        exit;
+     end;
+
      lastBlockSize := FileSize(f) mod BLOCK_SIZE;
      recordSize := GetRecordSize(GetCurrentTableMetadata());
      blockFactor := BLOCK_SIZE div recordSize;
-     GetRecordsCount := (GetBlockCount(f)-1)*blockFactor + lastBlockSize div recordSize;
+
+     if (lastBlockSize = 0) then begin
+        GetRecordsCount := blockCount * blockFactor;
+        exit;
+     end;
+
+     GetRecordsCount := (blockCount-1)*blockFactor + lastBlockSize div recordSize;
 end;
 
 procedure BuildIndex();
@@ -414,6 +425,7 @@ begin
                 if (blockNumber = blockCount-1) and ((FileSize(oldFile) mod BLOCK_SIZE) <> 0) then
                    maxAddr := FileSize(oldFile) mod BLOCK_SIZE;
                 block := GetBlock(oldFile, blockNumber);
+                blockAddr := 0;
 
                  Writeln('DEBUG | Last block coming');
             end;
@@ -441,6 +453,7 @@ begin
                       if (blockNumber = blockCount-1) and ((FileSize(oldFile) mod BLOCK_SIZE) <> 0) then
                          maxAddr := FileSize(oldFile) mod BLOCK_SIZE;
                       block := GetBlock(oldFile, blockNumber);
+                      blockAddr := 0;
                   end;
                end;
              end;

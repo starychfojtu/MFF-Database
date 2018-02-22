@@ -22,6 +22,9 @@ procedure PrintRecord(dbRecord: PDbRecord; metadata: PTableMetadata);
 { Marks record with given id as deleted, returns false when no record found }
 function Delete(id: LongWord): boolean;
 
+{ Returns count of record in primary file }
+function GetRecordCount(): LongWord;
+
 { Resets the whole database }
 procedure ResetDb();
 
@@ -117,9 +120,10 @@ begin
   end;
 
   { Print Primary file }
+  address := 0;
   for blockNumber:=0 to blockCount-1 do begin
       block := GetBlock(f, blockNumber);
-      maxAddress := BLOCK_SIZE;
+      maxAddress := BLOCK_SIZE-recordSize+1;
       if (blockNumber = blockCount-1) and ((FileSize(f) mod BLOCK_SIZE) <> 0 ) then
          maxAddress := FileSize(f) mod BLOCK_SIZE;
       while address < maxAddress do begin
@@ -170,6 +174,17 @@ begin
      end;
 
      Delete := false;
+     Close(f);
+end;
+
+function GetRecordCount(): LongWord;
+var f: file of byte;
+begin
+     Assign(f, TABLE_DATA_FILE);
+     Reset(f);
+
+     GetRecordCount := GetRecordsCount(f);
+
      Close(f);
 end;
 

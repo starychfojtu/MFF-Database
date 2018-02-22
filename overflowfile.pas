@@ -31,7 +31,7 @@ begin
      Assign(f, OVERFLOW_FILE);
      Reset(f);
 
-     IsOverflowFileFull := FileSize(f) >= BLOCK_SIZE;
+     IsOverflowFileFull := FileSize(f) + GetRecordSize(GetCurrentTableMetadata()) >= BLOCK_SIZE;
 
      Close(f);
 end;
@@ -61,11 +61,13 @@ end;
 
 function GetOverflowRecordCount(): LongWord;
 var f: file of byte;
+    recordSize: LongWord;
 begin
      Assign(f, OVERFLOW_FILE);
      Reset(f);
 
-     GetOverflowRecordCount := FileSize(f) div GetRecordSize(GetCurrentTableMetadata());
+     recordSize := GetRecordSize(GetCurrentTableMetadata());
+     GetOverflowRecordCount := FileSize(f) div recordSize;
 
      Close(f);
 end;
