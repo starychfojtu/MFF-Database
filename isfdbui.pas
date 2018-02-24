@@ -47,6 +47,8 @@ begin
      if (FileSize(f) = 0) then begin
         Writeln('No table has been created - type: create table');
         EnsureSchemaCreated := false;
+        Close(f);
+        exit;
      end;
 
      EnsureSchemaCreated := true;
@@ -201,38 +203,35 @@ begin
              COMMAND_HELP: Help();
              COMMAND_CREATE_TABLE: CreateTable();
              COMMAND_SHOW_SCHEMA: begin
-                   if not EnsureSchemaCreated() then exit;
-                   ShowSchema();
+                   if EnsureSchemaCreated() then ShowSchema();
              end;
              COMMAND_SELECT_ALL: begin
-                   if not EnsureSchemaCreated() then exit;
-                   ShowAll();
+                   if EnsureSchemaCreated() then ShowAll();
              end;
              COMMAND_INSERT_ROW: begin
-                   if not EnsureSchemaCreated() then exit;
-                   InsertDbRecord();
+                   if EnsureSchemaCreated() then InsertDbRecord();
              end;
              COMMAND_SEARCH: begin
-                   if not EnsureSchemaCreated() then exit;
-                   Search();
+                   if EnsureSchemaCreated() then Search();
              end;
              COMMAND_BUILD_INDEX: begin
-                   if not EnsureSchemaCreated() then exit;
-                   BuildIndex();
-                   WriteLn('Index builded.');
+                   if EnsureSchemaCreated() then begin
+                     BuildIndex();
+                     WriteLn('Index builded.');
+                   end;
              end;
              COMMAND_REORGANIZE: begin
-                   if not EnsureSchemaCreated() then exit;
-                   Reorganize();
-                   WriteLn('Database reorganized.');
+                   if EnsureSchemaCreated() then begin
+                     Reorganize();
+                     WriteLn('Database reorganized.');
+                   end;
              end;
              COMMAND_DELETE: begin
-                   if not EnsureSchemaCreated() then exit;
-                   DeletebyId();
+                   if EnsureSchemaCreated() then DeletebyId();
              end;
              COMMAND_COUNT: begin
-                   if not EnsureSchemaCreated() then exit;
-                   WriteLn('Total count: ', GetOverflowRecordCount() + GetRecordCount());
+                   if EnsureSchemaCreated() then
+                      WriteLn('Total count: ', GetOverflowRecordCount() + GetRecordCount());
              end
              else writeln('Invalid command ', command, ', see help for possible commands.');
         end;
