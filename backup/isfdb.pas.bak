@@ -2,6 +2,8 @@ program ISFDB;
 
 uses IsfDbUI, sysutils;
 
+{Ensure schema is created before any operation!}
+
 procedure InitializeFile(name: string);
 begin
   if not FileExists(name) then FileCreate(name);

@@ -9,7 +9,8 @@
         <Filename Value="isfdb.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ISFDB"/>
-        <CursorPos X="61" Y="8"/>
+        <IsVisibleTab Value="True"/>
+        <CursorPos X="59" Y="9"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -70,10 +71,9 @@
         <Filename Value="isfdbui.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="IsfDbUI"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="16"/>
-        <CursorPos X="27" Y="47"/>
+        <TopLine Value="200"/>
+        <CursorPos X="62" Y="224"/>
         <FoldState Value=" T3P0D013 piXjS032o"/>
         <UsageCount Value="193"/>
         <Loaded Value="True"/>

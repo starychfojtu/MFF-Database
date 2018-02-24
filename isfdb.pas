@@ -6,7 +6,7 @@ uses IsfDbUI, sysutils;
 
 procedure InitializeFile(name: string);
 begin
-  if not FileExists(name) then FileCreate(name);
+  if not FileExists(name) then FileClose(FileCreate(name));
 end;
 
 procedure Initialize();
