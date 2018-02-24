@@ -322,8 +322,6 @@ var overflowBlock, block: PBlock;
     recordSize, blockFactor, maxAddr, i, overflowRecordCount, recordCount: LongWord;
     deletedItemOnTop: boolean;
 begin
-     WriteLn('DEBUG | Reorganizing database');
-
      { Setup files }
      Assign(oldFile, 'table.bin');
      Reset(oldFile);

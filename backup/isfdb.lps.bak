@@ -9,7 +9,7 @@
         <Filename Value="isfdb.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ISFDB"/>
-        <CursorPos X="40" Y="9"/>
+        <CursorPos X="61" Y="8"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -17,11 +17,10 @@
         <Filename Value="dbms.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="DBMS"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="56"/>
-        <CursorPos Y="70"/>
-        <FoldState Value=" T3W0I022 pj1kI091w"/>
+        <TopLine Value="2"/>
+        <CursorPos X="31" Y="23"/>
+        <FoldState Value=" T3W0I3 piajJ0e2}"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit1>
@@ -39,9 +38,8 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="TableMetadata"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="29"/>
-        <CursorPos X="37" Y="22"/>
-        <UsageCount Value="199"/>
+        <CursorPos X="22" Y="8"/>
+        <UsageCount Value="200"/>
         <Bookmarks Count="1">
           <Item0 X="24" Y="71"/>
         </Bookmarks>
@@ -52,9 +50,10 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ByteFileUtils"/>
         <EditorIndex Value="7"/>
-        <CursorPos X="42" Y="21"/>
-        <FoldState Value=" T3V093r"/>
-        <UsageCount Value="198"/>
+        <TopLine Value="6"/>
+        <CursorPos X="40" Y="25"/>
+        <FoldState Value=" T3c092E"/>
+        <UsageCount Value="199"/>
         <Loaded Value="True"/>
       </Unit4>
       <Unit5>
@@ -62,29 +61,28 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="TableField"/>
         <EditorIndex Value="6"/>
-        <CursorPos Y="120"/>
-        <FoldState Value=" T3g0G88"/>
-        <UsageCount Value="197"/>
+        <TopLine Value="16"/>
+        <CursorPos Y="132"/>
+        <UsageCount Value="198"/>
         <Loaded Value="True"/>
       </Unit5>
       <Unit6>
         <Filename Value="isfdbui.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="IsfDbUI"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="106"/>
-        <CursorPos Y="198"/>
-        <FoldState Value=" T1Q0C T3j10G4s"/>
-        <UsageCount Value="192"/>
+        <TopLine Value="142"/>
+        <CursorPos X="94" Y="192"/>
+        <FoldState Value=" T3P0D3 pibjF093t"/>
+        <UsageCount Value="193"/>
         <Loaded Value="True"/>
       </Unit6>
       <Unit7>
         <Filename Value="overflowfile.pas"/>
         <UnitName Value="OverflowFile"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="9"/>
         <CursorPos X="25" Y="16"/>
-        <FoldState Value=" T3c0A111s"/>
         <UsageCount Value="85"/>
         <Loaded Value="True"/>
       </Unit7>
@@ -92,9 +90,9 @@
         <Filename Value="binarydbms.pas"/>
         <UnitName Value="BinaryDBMS"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="333"/>
-        <CursorPos Y="348"/>
-        <FoldState Value=" TCaB31 T3iD0E4 pj4jT0K3 piYjQ032 T0qHI2_"/>
+        <TopLine Value="316"/>
+        <CursorPos X="42" Y="326"/>
+        <FoldState Value=" TCaB31 T3iD0E4 pj2jR0K3 piYjQ032 T0qVI2I"/>
         <UsageCount Value="85"/>
         <Loaded Value="True"/>
       </Unit8>
@@ -123,136 +121,125 @@
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="dbms.pas"/>
-        <Caret Line="131" TopLine="106"/>
+        <Filename Value="binarydbms.pas"/>
+        <Caret Line="400" TopLine="384"/>
       </Position1>
       <Position2>
-        <Filename Value="dbms.pas"/>
-        <Caret Line="125" TopLine="106"/>
+        <Filename Value="binarydbms.pas"/>
+        <Caret Line="401" TopLine="384"/>
       </Position2>
       <Position3>
-        <Filename Value="dbms.pas"/>
-        <Caret Line="96" Column="35" TopLine="62"/>
+        <Filename Value="binarydbms.pas"/>
+        <Caret Line="403" TopLine="384"/>
       </Position3>
       <Position4>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="348" TopLine="335"/>
+        <Caret Line="410" TopLine="384"/>
       </Position4>
       <Position5>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="349" TopLine="335"/>
+        <Caret Line="413" TopLine="386"/>
       </Position5>
       <Position6>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="350" TopLine="335"/>
+        <Caret Line="419" Column="8" TopLine="405"/>
       </Position6>
       <Position7>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="351" TopLine="335"/>
+        <Filename Value="dbms.pas"/>
+        <Caret Line="74" Column="7" TopLine="56"/>
       </Position7>
       <Position8>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="352" TopLine="335"/>
+        <Filename Value="dbms.pas"/>
+        <Caret Line="71" TopLine="56"/>
       </Position8>
       <Position9>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="353" TopLine="335"/>
+        <Filename Value="dbms.pas"/>
+        <Caret Line="73" TopLine="56"/>
       </Position9>
       <Position10>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="354" TopLine="335"/>
+        <Filename Value="dbms.pas"/>
+        <Caret Line="78" TopLine="56"/>
       </Position10>
       <Position11>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="357" TopLine="347"/>
+        <Filename Value="dbms.pas"/>
+        <Caret Line="79" TopLine="56"/>
       </Position11>
       <Position12>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="358" TopLine="347"/>
+        <Filename Value="dbms.pas"/>
+        <Caret Line="81" TopLine="56"/>
       </Position12>
       <Position13>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="359" TopLine="347"/>
+        <Filename Value="dbms.pas"/>
+        <Caret Line="82" TopLine="56"/>
       </Position13>
       <Position14>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="362" TopLine="347"/>
+        <Filename Value="dbms.pas"/>
+        <Caret Line="84" TopLine="58"/>
       </Position14>
       <Position15>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="363" TopLine="347"/>
+        <Caret Line="120" TopLine="45"/>
       </Position15>
       <Position16>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="364" TopLine="347"/>
+        <Caret Line="121" TopLine="45"/>
       </Position16>
       <Position17>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="365" TopLine="347"/>
+        <Caret Line="122" TopLine="45"/>
       </Position17>
       <Position18>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="367" TopLine="347"/>
+        <Caret Line="124" TopLine="74"/>
       </Position18>
       <Position19>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="370" TopLine="347"/>
+        <Caret Line="125" TopLine="74"/>
       </Position19>
       <Position20>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="375" TopLine="354"/>
+        <Caret Line="126" TopLine="74"/>
       </Position20>
       <Position21>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="383" TopLine="358"/>
+        <Caret Line="128" TopLine="74"/>
       </Position21>
       <Position22>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="391" TopLine="384"/>
+        <Caret Line="129" TopLine="74"/>
       </Position22>
       <Position23>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="392" TopLine="384"/>
+        <Caret Line="130" TopLine="74"/>
       </Position23>
       <Position24>
         <Filename Value="binarydbms.pas"/>
-        <Caret Line="399" TopLine="384"/>
+        <Caret Line="142" TopLine="116"/>
       </Position24>
       <Position25>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="400" TopLine="384"/>
+        <Filename Value="dbms.pas"/>
+        <Caret Line="70" TopLine="60"/>
       </Position25>
       <Position26>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="401" TopLine="384"/>
+        <Filename Value="dbms.pas"/>
+        <Caret Line="87" TopLine="61"/>
       </Position26>
       <Position27>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="403" TopLine="384"/>
+        <Filename Value="isfdb.pas"/>
+        <Caret Line="17" Column="24"/>
       </Position27>
       <Position28>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="410" TopLine="384"/>
+        <Filename Value="isfdb.pas"/>
+        <Caret Line="10" Column="24"/>
       </Position28>
       <Position29>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="413" TopLine="386"/>
+        <Filename Value="isfdb.pas"/>
+        <Caret Line="5" Column="39"/>
       </Position29>
       <Position30>
-        <Filename Value="binarydbms.pas"/>
-        <Caret Line="419" Column="8" TopLine="405"/>
+        <Filename Value="isfdbui.pas"/>
+        <Caret Line="64" Column="32" TopLine="58"/>
       </Position30>
     </JumpHistory>
   </ProjectSession>
-  <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="dbms.pas"/>
-        <Line Value="70"/>
-      </Item1>
-    </BreakPoints>
-  </Debugging>
 </CONFIG>

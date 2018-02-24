@@ -326,17 +326,6 @@ begin
      Assign(oldFile, 'table.bin');
      Reset(oldFile);
      Assign(overflowFile, 'table.overflow');
-
-     { Check if primary file is empty}
-     if (FileSize(oldFile) = 0) then begin
-        Close(oldFile);
-        Rename(oldFile, 'tabletemp.bin');
-        Rename(overflowFile, 'table.bin');
-        Rename(oldFile, 'table.overflow');
-        BuildIndex();
-        exit;
-     end;
-
      Assign(newPrimaryFile, TEMP_FILE);
      Rewrite(newPrimaryFile);
 
@@ -353,6 +342,35 @@ begin
      overflowBlock := GetOverflowBlock();
      overflowRecordCount := GetOverflowRecordCount();
      overflowSortItems := SortBlock(overFlowBlock, recordSize, overflowRecordCount);
+
+     { Check if primary file is empty}
+     if (FileSize(oldFile) = 0) then begin
+        while overflowAddr < Length(overflowSortItems^) do begin
+           for i:=0 to recordSize-1 do mergeBlock[mergeAddr + i] := overflowBlock^[overflowSortItems^[overflowAddr].address + i];
+           mergeAddr := mergeAddr + recordSize;
+           Inc(overflowAddr);
+
+           Writeln('DEBUG | PRIMARY FILE is empty, inserting OVERFLOW with ', overflowSortItems^[overflowAddr-1].id);
+         end;
+
+        { Commit last block }
+        BlockWrite(newPrimaryFile, mergeBlock, mergeAddr);
+
+        { Close files }
+        Close(newPrimaryFile);
+        Close(oldFile);
+
+        Rename(oldFile, 'tempname.temp');
+        Rename(newPrimaryFile, 'table.bin');
+        Rename(oldFile, TEMP_FILE);
+        Rewrite(overflowFile);
+        Close(overflowFile);
+
+        { Build index }
+        BuildIndex();
+
+        exit;
+     end;
 
      { Setup primary block }
      recordCount := GetRecordsCount(oldFile);

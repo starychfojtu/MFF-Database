@@ -38,6 +38,21 @@ begin
   writeln('reorganize - forces the database reorganization (not recommended to use)');
 end;
 
+function EnsureSchemaCreated(): boolean;
+var f: file of byte;
+begin
+     Assign(f, TABLE_METADATA_FILE);
+     Reset(f);
+
+     if (FileSize(f) = 0) then begin
+        Writeln('No table has been created - type: create table');
+        EnsureSchemaCreated := false;
+     end;
+
+     EnsureSchemaCreated := true;
+     Close(f);
+end;
+
 procedure CreateTable();
 var name: TTableName;
     table: PTableMetadata;
@@ -66,7 +81,13 @@ begin
         ReadLn(fieldName);
 
         {Break loop}
-        if (fieldName = 'create') then break;
+        if (fieldName = 'create') then begin
+           if (table^.fields <> nil) then break
+           else begin
+              WriteLn('You must provide at least one field');
+              continue;
+           end;
+        end;
 
         {Load field type}
         Write('Type: ');
@@ -179,23 +200,45 @@ begin
         case command of
              COMMAND_HELP: Help();
              COMMAND_CREATE_TABLE: CreateTable();
-             COMMAND_SHOW_SCHEMA: ShowSchema();
-             COMMAND_SELECT_ALL: ShowAll();
-             COMMAND_INSERT_ROW: InsertDbRecord();
-             COMMAND_SEARCH: Search();
+             COMMAND_SHOW_SCHEMA: begin
+                   if not EnsureSchemaCreated() then exit;
+                   ShowSchema();]
+             end;
+             COMMAND_SELECT_ALL: begin
+                   if not EnsureSchemaCreated() then exit;
+                   ShowAll();
+             end;
+             COMMAND_INSERT_ROW: begin
+                   if not EnsureSchemaCreated() then exit;
+                   InsertDbRecord();
+             end;
+             COMMAND_SEARCH: begin
+                   if not EnsureSchemaCreated() then exit;
+                   Search();
+             end;
              COMMAND_BUILD_INDEX: begin
+                   if not EnsureSchemaCreated() then exit;
                    BuildIndex();
                    WriteLn('Index builded.');
              end;
              COMMAND_REORGANIZE: begin
+                   if not EnsureSchemaCreated() then exit;
                    Reorganize();
                    WriteLn('Database reorganized.');
              end;
-             COMMAND_DELETE: DeletebyId();
-             COMMAND_COUNT: WriteLn('Total count: ', GetOverflowRecordCount() + GetRecordCount());
+             COMMAND_DELETE: begin
+                   if not EnsureSchemaCreated() then exit;
+                   DeletebyId();
+             end;
+             COMMAND_COUNT: begin
+                   if not EnsureSchemaCreated() then exit;
+                   WriteLn('Total count: ', GetOverflowRecordCount() + GetRecordCount());
+             end
              else writeln('Invalid command ', command, ', see help for possible commands.');
         end;
-        readln(command);
+        WriteLn();
+        ReadLn(command);
+        WriteLn();
   end;
 
   writeln('Bye.');
